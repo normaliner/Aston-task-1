@@ -1,61 +1,119 @@
-// 1 
+// 1
 /*
-Метод OPTIONS представляет запрос информации об опциях соединения, доступных в цепочке запросов/ответов, идентифицируемой запрашиваемым URI. 
-Этот метод позволяет клиенту определять опции и требования, связанные с ресурсом, или возможностями сервера, но не производя никаких действий над ресурсом 
-и не инициируя его загрузку. Если ответ сервера - это не сообщение об ошибке, то ответ не должен содержать иной информации объекта, кроме той, которую можно 
-рассматривать как опции соединения (например Allow - можно рассматривать как опцию соединения, а Content-Type - нет). Ответы на этот метод не кэшируются.
+const counter1 = new Object({ a: 1 });
+const counter2 = Object.assign({}, { a: 2 });
+const counter3 = Object.create({}, { a: { value: 3 } });
+const counter4 = {};
+Object.defineProperty(counter4, 'a', { value: 4 });
+const counter5 = {};
+Object.defineProperties(counter5, { a: { value: 5 } });
+const counter6 = { a: 6 };
 */
-// 2 
+// 2
 /*
-Особенности HTTP Версии 3
- - использует новый транспортный протокол QUIC и передаёт данные быстрее. QUIC — транспортный протокол, работающий поверх UDP. Передаёт 
- данные быстрее TCP, тратит меньше времени на установку соединения, но при этом такой же надёжный
- - HTTP/3 использует QUIC на транспортном уровне и уровне безопасности. QUIC заменяет TCP и TLS.
- - имеет другой алгоритм сжатия заголовков и исключает некоторые функции (например, мультиплексирование), так как их уже содержит QUIC.
- - HTTP/3 лучше реализовывает мультиплексирование. Если в HTTP/2 при потере TCP-пакета вся передача данных останавливалась до восстановления 
- пропажи, то в HTTP/3 информация продолжает передаваться.
-*/
+const mainCounter = {
+  a: {
+    b: 'c',
+    d: {
+      e: 'f',
+      g: ['h', 'i'],
+    },
+  },
+  j: new Date('2023-10-10'),
+};
+// Неправильное копирование объектов, так как сохраняются ссылки
+const counter1 = { ...mainCounter };
 
+const counter2 = Object.assign({}, mainCounter);
+
+const counter3 = Object.create(
+  Object.getPrototypeOf(mainCounter),
+  Object.getOwnPropertyDescriptors(mainCounter)
+);
+// Правильно копирование, однако не всегда работает 
+const counter4 = JSON.parse(JSON.stringify(mainCounter));
+function deepCopy(obj) {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj;
+  }
+
+  let copy = Array.isArray(obj) ? [] : {};
+
+  for (let key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      copy[key] = deepCopy(obj[key]);
+    }
+  }
+
+  return copy;
+}
+const counter5 = deepCopy(mainCounter);
+const counter6 = structuredClone(mainCounter);
+*/
 // 3
-/* AbortController позволяет отменять не только fetch, но и другие асинхронные задачи. AbortController имеет единственный метод abort() и 
-свойство signal, при вызове abort генерируется событие с именем abort на объекте constroller.signal и controller.signal.aborted становится 
-равным true */
-
+/*
+function makeCounter1() {
+  console.log('Hello');
+}
+const makeCounter2 = function () {
+  console.log('Hello');
+};
+const makeCounter3 = () => {
+  console.log('Hello');
+};
+const makeCounter4 = function sayHi() {
+  console.log('Hello');
+};
+(() => {
+  console.log('Hello');
+})();
+*/
 // 4
-const str1 = new String('Str1');
-const str2 = 'Str2';
-const str3 = 'Str' + 3;
-const str4 = `${4}`;
-
-const num1 = new Number(1);
-const num2 = 2;
-const num4 = '+3';
-
-const bool1 = new Boolean(1);
-const bool2 = false;
-const bool3 = 1 > 0;
-
-const null1 = null;
-
-const undefined1 = undefined;
-let undefined2;
-
-const symbol1 = Symbol(1);
-const symbol2 = Symbol.for(2);
-
-const bigInt1 = BigInt(1);
-const bigInt2 = 2n;
-
+/*
+structuredClone() - глобальная функция в JavaScript для безопасного и 
+эффективного создания глубоких копий сложных объектов и структур данных, 
+включая объекты, массивы, Map, Set и другие. Она поддерживает глубокое копирование, 
+сохраняет ссылки, но не может скопировать определенные типы данных, 
+такие как функции и регулярные выражения.
+*/
 // 5
-/* Потому что const и let ограничены областью видимости блока, поэтому при обращении к этим переменным будет ReferenceError 
-Переменные объявленные через const и let до их иницилизации находятся в Temporal Dead Zone*/
+/*
+const obj1 = { here: { is: 'on', other: '3' }, object: 'Y' };
+const obj2 = { here: { is: 'on', other: '3' }, object: 'Y' };
+const deepEqual = (obj1, obj2) => {
+  if (
+    typeof obj1 !== 'object' ||
+    typeof obj2 !== 'object' ||
+    obj1 === null ||
+    obj2 === null
+  ) {
+    return obj1 === obj2;
+  }
 
+  const objectKeys1 = Object.keys(obj1);
+  const objectKeys2 = Object.keys(obj2);
+
+  if (objectKeys1.length !== objectKeys2.length) {
+    return false;
+  }
+
+  for (let key of objectKeys1) {
+    if (!objectKeys2.includes(key)) {
+      return false;
+    }
+  }
+
+  for (let key of objectKeys1) {
+    if (!deepEqual(obj1[key], obj2[key])) {
+      return false;
+    }
+  }
+  return true;
+};
+*/
 // 6
-const res = 'B' + 'a' + (1 - 'hello');
-console.log(res); // baNan, так как результат выражения (1-'hello') является Not-a-Number
-
-const res2 = (true && 3) + 'd';
-console.log(res2); // 3d, так как выражение (true && 3) возвращает 3 - конъюнкция
-
-const res3 = Boolean(true && 3) + 'd';
-console.log(res3); // trued, аналогично со вторым примером выражение (true && 3) вернет 3, а после приведение к Boolean-типу вернет true
+/*
+function reverseStr(str) {
+  return str.split('').reverse().join('');
+}
+*/
