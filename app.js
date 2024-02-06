@@ -1,119 +1,47 @@
 // 1
-/*
-const counter1 = new Object({ a: 1 });
-const counter2 = Object.assign({}, { a: 2 });
-const counter3 = Object.create({}, { a: { value: 3 } });
-const counter4 = {};
-Object.defineProperty(counter4, 'a', { value: 4 });
-const counter5 = {};
-Object.defineProperties(counter5, { a: { value: 5 } });
-const counter6 = { a: 6 };
+/* Массивы в JS являются универсальными (неправильными), так как могут совмещать в себе несколько структур данных.
+Так происходит, потому что массивы представляют собой объектоы с особым поведением, которое позволяет использовать их
+для  различных целей.
+Некоторые из них:
+- Индексированный список: Основное назначение массивов в JavaScript - это хранение упорядоченного списка элементов.
+Эти элементы могут быть любого типа данных, и к ним можно обращаться по индексу.
+- Стек: Массивы могут использоваться как стеки, где элементы добавляются и удаляются с одного конца. Методы push() и pop() 
+могут использоваться для добавления и удаления элементов с конца массива. 
+- Очередь: Массивы также могут использоваться как очереди, где элементы добавляются в конец массива и удаляются из начала. 
+Методы push() и shift() могут использоваться для этого.
+- Ассоциативные массивы: В JavaScript массивы также могут быть использованы как ассоциативные массивы (также известные как словари или хэши), 
+где значения доступны по строковым ключам, а не только по числовым индексам.
+- Динамическое изменение размера: Массивы в JavaScript могут динамически изменять свой размер, поэтому они могут расширяться или уменьшаться 
+по мере необходимости без явного объявления размера.
 */
+
 // 2
-/*
-const mainCounter = {
-  a: {
-    b: 'c',
-    d: {
-      e: 'f',
-      g: ['h', 'i'],
-    },
-  },
-  j: new Date('2023-10-10'),
-};
-// Неправильное копирование объектов, так как сохраняются ссылки
-const counter1 = { ...mainCounter };
-
-const counter2 = Object.assign({}, mainCounter);
-
-const counter3 = Object.create(
-  Object.getPrototypeOf(mainCounter),
-  Object.getOwnPropertyDescriptors(mainCounter)
-);
-// Правильно копирование, однако не всегда работает 
-const counter4 = JSON.parse(JSON.stringify(mainCounter));
-function deepCopy(obj) {
-  if (typeof obj !== 'object' || obj === null) {
-    return obj;
-  }
-
-  let copy = Array.isArray(obj) ? [] : {};
-
-  for (let key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      copy[key] = deepCopy(obj[key]);
-    }
-  }
-
-  return copy;
+function logger() {
+  console.log(`I output only external context: ${this.item}`);
 }
-const counter5 = deepCopy(mainCounter);
-const counter6 = structuredClone(mainCounter);
-*/
-// 3
-/*
-function makeCounter1() {
-  console.log('Hello');
-}
-const makeCounter2 = function () {
-  console.log('Hello');
-};
-const makeCounter3 = () => {
-  console.log('Hello');
-};
-const makeCounter4 = function sayHi() {
-  console.log('Hello');
-};
-(() => {
-  console.log('Hello');
-})();
-*/
-// 4
-/*
-structuredClone() - глобальная функция в JavaScript для безопасного и 
-эффективного создания глубоких копий сложных объектов и структур данных, 
-включая объекты, массивы, Map, Set и другие. Она поддерживает глубокое копирование, 
-сохраняет ссылки, но не может скопировать определенные типы данных, 
-такие как функции и регулярные выражения.
-*/
-// 5
-/*
-const obj1 = { here: { is: 'on', other: '3' }, object: 'Y' };
-const obj2 = { here: { is: 'on', other: '3' }, object: 'Y' };
-const deepEqual = (obj1, obj2) => {
-  if (
-    typeof obj1 !== 'object' ||
-    typeof obj2 !== 'object' ||
-    obj1 === null ||
-    obj2 === null
-  ) {
-    return obj1 === obj2;
-  }
 
-  const objectKeys1 = Object.keys(obj1);
-  const objectKeys2 = Object.keys(obj2);
+const obj = { item: 'some value' };
+const testBind = logger.bind(obj);
+testBind();
+logger.call(obj);
+logger.apply(obj);
 
-  if (objectKeys1.length !== objectKeys2.length) {
-    return false;
+// 3.1
+const getArrayNumber = () => {
+  newArray = [];
+  for (let i = 0; i < 100; i++) {
+    let randomValue = Math.floor(Math.random() * 100 + 1);
+    newArray.push(randomValue);
   }
-
-  for (let key of objectKeys1) {
-    if (!objectKeys2.includes(key)) {
-      return false;
-    }
-  }
-
-  for (let key of objectKeys1) {
-    if (!deepEqual(obj1[key], obj2[key])) {
-      return false;
-    }
-  }
-  return true;
+  return newArray;
 };
-*/
-// 6
-/*
-function reverseStr(str) {
-  return str.split('').reverse().join('');
-}
-*/
+const arrNumber = getArrayNumber();
+const sumArray = arrNumber.reduce((acc, value) => acc + value);
+const minValue = arrNumber.reduce((acc, value) => (acc > value ? value : acc));
+const maxValue = arrNumber.reduce((acc, value) => (acc > value ? acc : value));
+
+const arrString = ['Hello', ' wolrd ', '!'];
+const joinStringArray = arrString.reduce((acc, value) => acc.concat(value));
+
+// 3.2
+
