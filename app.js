@@ -1,146 +1,129 @@
 // 1
-/* Массивы в JS являются универсальными (неправильными), так как могут совмещать в себе несколько структур данных.
-Так происходит, потому что массивы представляют собой объектоы с особым поведением, которое позволяет использовать их
-для  различных целей.
-Некоторые из них:
-- Индексированный список: Основное назначение массивов в JavaScript - это хранение упорядоченного списка элементов.
-Эти элементы могут быть любого типа данных, и к ним можно обращаться по индексу.
-- Стек: Массивы могут использоваться как стеки, где элементы добавляются и удаляются с одного конца. Методы push() и pop() 
-могут использоваться для добавления и удаления элементов с конца массива. 
-- Очередь: Массивы также могут использоваться как очереди, где элементы добавляются в конец массива и удаляются из начала. 
-Методы push() и shift() могут использоваться для этого.
-- Ассоциативные массивы: В JavaScript массивы также могут быть использованы как ассоциативные массивы (также известные как словари или хэши), 
-где значения доступны по строковым ключам, а не только по числовым индексам.
-- Динамическое изменение размера: Массивы в JavaScript могут динамически изменять свой размер, поэтому они могут расширяться или уменьшаться 
-по мере необходимости без явного объявления размера.
+/*
+Сортировка пузырьком (Bubble Sort): 
+Этот алгоритм проходит по списку множество раз. На каждом проходе соседние 
+элементы сравниваются и меняются местами, если они находятся в неправильном порядке.
+
+Сортировка вставками (Insertion Sort): 
+Алгоритм сортировки, который постепенно строит отсортированный список. 
+На каждом шаге один элемент добавляется в отсортированную часть массива.
+
+Сортировка выбором (Selection Sort): 
+Этот алгоритм разделяет массив на две части: отсортированную и неотсортированную. 
+На каждом шаге он выбирает минимальный элемент из неотсортированной части и помещает его в конец отсортированной части.
+
+Сортировка слиянием (Merge Sort): 
+Рекурсивный алгоритм, который разделяет список пополам, сортирует каждую половину, а затем объединяет их вместе.
+
+Быстрая сортировка (Quick Sort): 
+Еще один рекурсивный алгоритм, который выбирает опорный элемент и разделяет массив на две части: 
+элементы, меньшие опорного, и элементы, большие опорного. Затем он рекурсивно сортирует обе части.
+
+Сортировка счетчиком (Counting Sort): 
+Эффективный алгоритм для сортировки целых чисел в заданном диапазоне. 
+Он подсчитывает количество элементов каждого значения и затем использует эту информацию для правильной упорядоченности.
+
+Пирамидальная сортировка (Heap Sort): 
+Алгоритм, который преобразует массив в двоичное куча, а затем постепенно извлекает наибольшие элементы из кучи и перестраивает ее.
 */
 
-// 2
-function logger() {
-  console.log(`I output only external context: ${this.item}`);
+//3
+// Первый способ создания объекта
+/*
+const Person = {
+  name: 'Viktor',
+  sayHi() {
+    console.log(`Hello ${this.name}`);
+  },
+  setNewName(name) {
+    this.name = name;
+  },
+}; */
+// Второй способ создания объекта
+/*
+const Person = Object.create(
+  {},
+  {
+    name: { value: 'Viktor' },
+    sayHi: {
+      value: function () {
+        console.log(`Hello ${this.name}`);
+      },
+    },
+    setNewName: {
+      value: function (name) {
+        this.name = name;
+      },
+    },
+  }
+);
+*/
+// Третий способ создания объекта
+const Person = Object.assign(
+  {},
+  {
+    name: 'Viktor',
+    sayHi() {
+      console.log(`Hello ${this.name}`);
+    },
+    setNewName(name) {
+      this.name = name;
+    },
+  }
+);
+const Person2 = Object.assign({}, Person);
+Person2.setNewName('Maria');
+Person2.sayHi();
+Object.defineProperty(Object.prototype, 'logInfo', {
+  value: function () {
+    console.log(`Logging info ${this.name}`);
+  },
+});
+Person2.logInfo();
+Person.logInfo();
+
+// 4
+class PersonTree {
+  constructor(name) {
+    this.name = name;
+  }
+  get getName() {
+    return this.name;
+  }
+  set setName(name) {
+    this.name = name;
+  }
 }
+const personTree = new PersonTree('Viktor');
+console.log(personTree.getName);
+personTree.setName = 'Vitaliy';
 
-const obj = { item: 'some value' };
-const testBind = logger.bind(obj);
-testBind();
-logger.call(obj);
-logger.apply(obj);
+class PersonTree2 extends PersonTree {}
+const personTree2 = new PersonTree2('Maria');
+console.log(personTree2.getName);
+personTree2.setName = 'Daria';
+console.log(personTree2.getName);
 
-// 3.1
-const getArrayNumber = () => {
-  newArray = [];
-  for (let i = 0; i < 100; i++) {
-    let randomValue = Math.floor(Math.random() * 100 + 1);
-    newArray.push(randomValue);
-  }
-  return newArray;
-};
-const arrNumber = getArrayNumber();
-const sumArray = arrNumber.reduce((acc, value) => acc + value);
-const minValue = arrNumber.reduce((acc, value) => (acc > value ? value : acc));
-const maxValue = arrNumber.reduce((acc, value) => (acc > value ? acc : value));
+// Bonus Task
+arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+total = 13;
 
-const arrString = ['Hello', ' wolrd ', '!'];
-const joinStringArray = arrString.reduce((acc, value) => acc.concat(value));
-
-// 3.2
-class Stack {
-  constructor() {
-    this.arr = [];
-  }
-  // Определение на пустоту
-  isEmpty() {
-    return !Boolean(this.arr.length);
-  }
-  // Добавление элемента в стэк
-  push(value) {
-    this.arr.push(value);
-  }
-  // Удаление и получение последнего элемента стэка
-  pop() {
-    if (this.isEmpty()) {
-      return 'Out of range';
+// Сложность алгоритма O(n), если элементы уже отсортированны, если же нет, то O(nlog(n))
+const firstSum = (arr, total) => {
+  //arr = arr.sort((a, b) => a - b);
+  let leftIndex = 0;
+  let rightIndex = arr.length - 1;
+  while (leftIndex !== rightIndex) {
+    let sum = arr[leftIndex] + arr[rightIndex];
+    if (sum === total) {
+      return [arr[leftIndex], arr[rightIndex]];
     }
-    return this.arr.pop();
-  }
-  // Получение последнего элемента без удаления
-  peek() {
-    if (this.isEmpty()) {
-      return 'Out of range';
+    if (sum > total) {
+      rightIndex--;
+    } else {
+      leftIndex++;
     }
-    return this.arr[this.arr.length - 1];
   }
-  // Получение длины стэка
-  size() {
-    return this.arr.length;
-  }
-  // Очищение стэка
-  clear() {
-    this.arr = [];
-  }
-  // Вывод стэка
-  print() {
-    console.log(this.arr.toString());
-  }
-}
-const stack = new Stack();
-
-// 3.3
-class Queue {
-  constructor() {
-    this.arr = [];
-  }
-  // Определение на пустоту
-  isEmpty() {
-    return this.arr.length === 0;
-  }
-  // Добавление элемента в очередь
-  push(value) {
-    this.arr.push(value);
-  }
-  // Удаление первого элемента очереди
-  pop() {
-    return this.arr.shift();
-  }
-  // Получение первого элемента без удаления
-  front() {
-    return this.arr[0];
-  }
-  // Получение последнего элемента без удаления
-  back() {
-    return this.arr[this.arr.length - 1];
-  }
-  // Получение длины очереди
-  size() {
-    return this.arr.length;
-  }
-  // Вывод очереди
-  print() {
-    console.log(this.arr.toString());
-  }
-}
-const queue = new Queue();
-
-// Bonus task
-Function.prototype.bind = function (context) {
-  let fn = this; // Исходная функция
-  let args = Array.prototype.slice.call(arguments, 1); // Аргументы, переданные в bind, начиная со второго
-
-  // Возвращаем функцию, которая вызывает исходную функцию fn с заданным контекстом и аргументами
-  return function () {
-    let bindArgs = Array.prototype.slice.call(arguments); // Аргументы, переданные при вызове
-    return fn.apply(context, args.concat(bindArgs)); // Объединяем аргументы из bind и вызова
-  };
+  return false;
 };
-
-function sayHi() {
-  console.log(`Hello ${this.name}`);
-}
-
-const obj1 = { name: 'Viktor' };
-const obj2 = { name: 'Maria' };
-
-const test1 = sayHi.bind(obj1)
-test1();
-const test2 = sayHi.bind(obj2)
-test2();
+console.log(firstSum(arr, total));
